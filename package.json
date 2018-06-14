@@ -1,0 +1,55 @@
+{
+  "name": "socket-port-helpers",
+  "version": "0.1.0",
+  "description": "A serializer of object, buffer, string, number and boolean for socket.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emmkimme/socket-port-helpers.git"
+  },
+  "keywords": [
+    "socket",
+    "port",
+    "net"
+  ],
+  "author": "Emmanuel Kimmerlin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/emmkimme/socket-port-helpers/issues"
+  },
+  "homepage": "https://github.com/emmkimme/socket-port-helpers#readme",
+  "maintainers": [
+    {
+      "name": "Emmanuel Kimmerlin",
+      "email": "emmanuel.kimmerlin@thomsonreuters.com"
+    }
+  ],
+  "main": "./lib/socket-port-helpers.js",
+  "browser": "./lib/socket-port-helpers-browser.js",
+  "types": "./lib/socket-port-helpers.d.ts",
+  "devDependencies": {
+    "@types/node": "0.0.3",
+    "chai": "^4.1.2",
+    "del": "^2.2.2",
+    "del-cli": "^0.2.1",
+    "dts-bundle": "^0.6.1",
+    "mocha": "^4.0.1",
+    "sinon": "^4.0.1",
+    "tslint": "^4.1.1",
+    "tslint-microsoft-contrib": "^4.0.1",
+    "typescript": "^2.5.3"
+  },
+  "scripts": {
+    "clean": "del-cli ./lib ./build ./dist",
+    "build": "npm run build-js && npm run build-declaration",
+    "build-js": "tsc -p ./tsconfig/tsconfig-js.json",
+    "build-declaration": "npm run build-declaration-ts && npm run build-declaration-dts-bundle && npm run clean-declaration-dts",
+    "build-declaration-ts": "tsc -p ./tsconfig/tsconfig-declaration.json",
+    "build-declaration-dts-generator": "dts-generator --name socket-port-helpers --project . --out ./lib/index.d.ts",
+    "build-declaration-dts-bundle": "dts-bundle --outputAsModuleFolder --name socket-port-helpers --main ./lib/socket-port-helpers.d.ts",
+    "clean-declaration-dts": "del-cli ./lib/code/*.d.ts",
+    "test": "mocha test --recursive",
+    "tsc": "tsc",
+    "tslint": "tslint",
+    "publication": "npm publish ./ --registry https://registry.npmjs.org/"
+  }
+}
