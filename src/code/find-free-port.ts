@@ -13,8 +13,8 @@ export interface FindFreePortOptions extends TestPortOptions {
     portMax?: number;
 }
 
-function testPortRange(options?: FindFreePortOptions): Promise<number> {
-    if (options.portMin <= options.portMax) {
+function testPortRange(port: number, options?: FindFreePortOptions): Promise<number> {
+    if (port <= options.portMax) {
         // const subRange = 5;
         // let promisePorts: Promise<number>[] = [];
         // let portRange = Math.min(portStart + subRange, portMax);
@@ -22,22 +22,28 @@ function testPortRange(options?: FindFreePortOptions): Promise<number> {
         //     promisePorts.push(testPort(portStart));
         // }
         // return invert(Promise.all(promisePorts.map(invert)))
-        return testPort(options.portMin, options)
+        return testPort(port, options)
         .then((port) => {
             return port;
         })
         .catch((err) => {
-            options.portMin += 1;
-            return testPortRange(options);
+            return testPortRange(port + 1, options);
         });
     }
     return Promise.resolve(0);
 }
 
 export function findFreePort(options?: FindFreePortOptions): Promise<number> {
-    let localOptions: FindFreePortOptions = {};
-    localOptions.portMin = (options.portMin == null) ? basePort : Math.max(basePortMin, options.portMin);
-    localOptions.portMax = (options.portMax == null) ? basePortMax : Math.min(basePortMax, options.portMax);
-    localOptions.log = options.log;
-    return testPortRange(localOptions);
+    options = options || {};
+    options.portMin = (options.portMin == null) ? basePort : Math.max(basePortMin, options.portMin);
+    if (options.portMax == null) { 
+        options.portMax = basePortMax;
+    }
+    else if (options.portMax >= 0) {
+        options.portMax = Math.min(basePortMax, options.portMax);
+    }
+    else {
+        options.portMax = Math.min(basePortMax, options.portMin - options.portMax);
+    }
+    return testPortRange(options.portMin, options);
 }

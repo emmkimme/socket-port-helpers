@@ -54,7 +54,7 @@ export function testPort(port: number, options?: TestPortOptions): Promise<numbe
             }
             options.log && console.log(`Test port ${port} : server listening`);
             options.log && console.log(`Test port ${port} : connect client`);
-            socket = net.connect(port);
+            socket = net.createConnection(port, options.hostname);
             if (options.testData) {
                 socket.addListener('data', (buff: Buffer) => {
                     if (buff.toString() === handshakeData) {
@@ -79,7 +79,7 @@ export function testPort(port: number, options?: TestPortOptions): Promise<numbe
             });
         });
         server.addListener('connection', (socket: net.Socket) => {
-            if (!options.testConnection) {
+            if (!options.testData) {
                 fulfilled(true, `Test port ${port} : client connected`);
                 return;
             }
