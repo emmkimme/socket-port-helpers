@@ -19,7 +19,7 @@ export function testPort(port: number, options?: TestPortOptions): Promise<numbe
         let socket: net.Socket;
         let timer: NodeJS.Timer;
 
-        let fulfilled = (success: boolean, msg: string) => {
+        let fulfilled = (success: boolean, msg: string, err?: Error) => {
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -37,65 +37,74 @@ export function testPort(port: number, options?: TestPortOptions): Promise<numbe
                 });
             }
             else {
-                options.log && console.error(msg);
+                options.log && console.error(`${msg} - ${err}`);
                 server.close();
-                reject(msg);
+                reject(err);
             }
         };
 
         timer = setTimeout(() => {
             timer = null;
-            fulfilled(false, `Test port ${port} : server timeout ${options.timeoutDelay}ms`);
+            fulfilled(false, `Port ${port} : server error`, new Error(`timeout ${options.timeoutDelay}ms`));
         }, options.timeoutDelay);
 
+        // https://nodejs.org/api/net.html#net_event_listening
         server.addListener('listening', () => {
             if (!options.testConnection) {
-                fulfilled(true, `Test port ${port} : server listening`);
+                fulfilled(true, `Port ${port} : server listening`);
                 return;
             }
-            options.log && console.log(`Test port ${port} : server listening`);
-            options.log && console.log(`Test port ${port} : connect client`);
+            options.log && console.log(`Port ${port} : server listening`);
+            options.log && console.log(`Port ${port} : connect socket`);
             socket = net.createConnection(port, options.hostname);
             if (options.testData) {
+                // https://nodejs.org/api/net.html#net_event_data
                 socket.addListener('data', (buff: Buffer) => {
                     if (buff.toString() === handshakeData) {
-                        fulfilled(true, `Test port ${port} : client receives correct data`);
+                        fulfilled(true, `Port ${port} : socket receives correct data`);
                     }
                     else {
-                        fulfilled(false, `Test port ${port} : client receives wrong data`);
+                        fulfilled(false, `Port ${port} : socket error`, new Error(`receives wrong data`));
                     }
                 });
             }
+            // https://nodejs.org/api/net.html#net_event_end
             socket.addListener('end', () => {
-                options.log && console.log(`Test port ${port} : client end`);
+                options.log && console.log(`Port ${port} : socket end`);
             });
+            // https://nodejs.org/api/net.html#net_event_close_1
             socket.addListener('close', (had_error: boolean) => {
-                options.log && console.log(`Test port ${port} : client close (had error=${had_error})`);
+                options.log && console.log(`Port ${port} : socket close (had error=${had_error})`);
             });
+            // https://nodejs.org/api/net.html#net_event_timeout
             socket.addListener('timeout', () => {
-                fulfilled(false, `Test port ${port} : client timeout`);
+                fulfilled(false, `Port ${port} : socket error`, new Error(`timeout`));
             });
+            // https://nodejs.org/api/net.html#net_event_error_1
             socket.addListener('error', (err: Error) => {
-                fulfilled(false, `Test port ${port} : client error ${err}`);
+                fulfilled(false, `Port ${port} : socket error`, err);
             });
         });
+        // https://nodejs.org/api/net.html#net_event_connection
         server.addListener('connection', (socket: net.Socket) => {
             if (!options.testData) {
-                fulfilled(true, `Test port ${port} : client connected`);
+                fulfilled(true, `Port ${port} : socket connected`);
                 return;
             }
-            options.log && console.log(`Test port ${port} : client connected`);
-            options.log && console.log(`Test port ${port} : server sends data`);
+            options.log && console.log(`Port ${port} : socket connected`);
+            options.log && console.log(`Port ${port} : server sends data`);
             let buff = Buffer.from(handshakeData);
             socket.write(buff);
         });
-        server.addListener('close', (err: Error) => {
-            options.log && console.log(`Test port ${port} : server close ${err ? err : ''}`);
+        // https://nodejs.org/api/net.html#net_event_close
+        server.addListener('close', () => {
+            options.log && console.log(`Port ${port} : server close`);
         });
+        // https://nodejs.org/api/net.html#net_event_error
         server.addListener('error', (err: Error) => {
-            fulfilled(false, `Test port ${port} : server error ${err ? err : ''}`);
+            fulfilled(false, `Port ${port} : server error`, err);
         });
-        options.log && console.log(`Test port ${port} -------------`);
+        options.log && console.log(`Port ${port} -------------`);
         server.listen(port, options.hostname);
     });
 }

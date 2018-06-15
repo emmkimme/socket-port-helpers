@@ -21,6 +21,7 @@ export interface TestPortOptions {
     log?: boolean;
     testConnection?: boolean;
     testData?: boolean;
+    timeoutDelay?: number;
 }
 
 export function testPort(port: number, options?: TestPortOptions): Promise<number>;
@@ -40,7 +41,7 @@ export function findFreePort(options?: FindFreePortOptions): Promise<number>;
 # Find multiple free ports
 
 ```ts
-export interface FindMultipleFreesPortOptions extends FindFreePortOptions {
+export interface FindMultipleFreePortsOptions extends FindFreePortOptions {
 }
 
 export function findMultipleFreePorts(count: number, options?: FindFreePortOptions): Promise<number[]>;

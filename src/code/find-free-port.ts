@@ -12,7 +12,7 @@ export interface FindFreePortOptions extends TestPortOptions {
     portMax?: number;
 }
 
-function testPortRange(port: number, options?: FindFreePortOptions): Promise<number> {
+function _findFreePort(port: number, options?: FindFreePortOptions): Promise<number> {
     if (port <= options.portMax) {
         // const subRange = 5;
         // let promisePorts: Promise<number>[] = [];
@@ -26,7 +26,7 @@ function testPortRange(port: number, options?: FindFreePortOptions): Promise<num
             return port;
         })
         .catch((err) => {
-            return testPortRange(port + 1, options);
+            return _findFreePort(port + 1, options);
         });
     }
     return Promise.resolve(0);
@@ -44,6 +44,6 @@ export function findFreePort(options?: FindFreePortOptions): Promise<number> {
     else {
         options.portMax = Math.min(basePortMax, options.portMin - options.portMax);
     }
-    return testPortRange(options.portMin, options);
+    return _findFreePort(options.portMin, options);
 }
 

@@ -2,10 +2,10 @@ import { testPort } from './test-port';
 import { FindFreePortOptions } from './find-free-port';
 import { basePort, basePortMin, basePortMax } from './constants';
 
-export interface FindFreePortsOptions extends FindFreePortOptions {
+export interface FindMultipleFreePortsOptions extends FindFreePortOptions {
 }
 
-function testMultiplePortsRange(results: number[], port: number, options?: FindFreePortsOptions): Promise<number[]> {
+function _findMultipleFreePorts(results: number[], port: number, options?: FindMultipleFreePortsOptions): Promise<number[]> {
     return new Promise<number[]>((resolve, reject) => {
         if (port <= options.portMax) {
             let promiseResults: Promise<number>[] = [];
@@ -29,7 +29,7 @@ function testMultiplePortsRange(results: number[], port: number, options?: FindF
             }
             return Promise.all(promiseResults)
             .then(() => {
-                resolve(testMultiplePortsRange(results, port + promiseResults.length, options));
+                resolve(_findMultipleFreePorts(results, port + promiseResults.length, options));
             });
         }
         else {
@@ -38,7 +38,7 @@ function testMultiplePortsRange(results: number[], port: number, options?: FindF
     });
 }
 
-export function findMultipleFreePorts(count: number, options?: FindFreePortsOptions): Promise<number[]> {
+export function findMultipleFreePorts(count: number, options?: FindMultipleFreePortsOptions): Promise<number[]> {
     options = options || {};
     options.portMin = (options.portMin == null) ? basePort : Math.max(basePortMin, options.portMin);
     if (options.portMax == null) {
@@ -51,5 +51,5 @@ export function findMultipleFreePorts(count: number, options?: FindFreePortsOpti
         options.portMax = Math.min(basePortMax, options.portMin - options.portMax);
     }
     let results: number[] = new Array(count);
-    return testMultiplePortsRange(results, options.portMin, options);
+    return _findMultipleFreePorts(results, options.portMin, options);
 }

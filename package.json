@@ -1,6 +1,6 @@
 {
   "name": "socket-port-helpers",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "A serializer of object, buffer, string, number and boolean for socket.",
   "repository": {
     "type": "git",
@@ -15,6 +15,7 @@
     "find",
     "finder",
     "free",
+    "range",
     "available",
     "connection",
     "connect",
@@ -62,5 +63,8 @@
     "tsc": "tsc",
     "tslint": "tslint",
     "publication": "npm publish ./ --registry https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "portman": "0.0.3"
   }
 }

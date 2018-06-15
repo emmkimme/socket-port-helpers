@@ -11,7 +11,7 @@
                 "sourceMaps": true,
            
                 "args": [
-                    // "--grep=find-multiple-free-ports",
+                    "--grep=test-range-port",
                     "test/**/*.js",
                     "--no-timeouts",
                     "--recursive"
