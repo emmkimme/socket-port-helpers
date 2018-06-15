@@ -12,11 +12,12 @@ npm install socket-port-helpers
 
 Dependencies
 * http://nodejs.org/
+* https://github.com/YounGoat/nodejs.portman
 
 # Test a port
 
 ```ts
-export interface TestPortOptions {
+interface TestPortOptions {
     hostname?: string;
     log?: boolean;
     testConnection?: boolean;
@@ -24,27 +25,62 @@ export interface TestPortOptions {
     timeoutDelay?: number;
 }
 
-export function testPort(port: number, options?: TestPortOptions): Promise<number>;
+function testPort(port: number, options?: TestPortOptions): Promise<number>;
+```
+
+# Test multiple ports
+
+```ts
+interface TestPortRangeOptions extends TestPortOptions {
+    rangeSlice?: number;
+}
+
+interface TestRangeResult {
+    port: number;
+    free: boolean;
+    err?: Error;
+    errMsg?: string;
+}
+
+testPortRangeFunction(portRange: string, options?: TestPortRangeOptions): Promise<TestRangeResult[];
+
+Thanks to the package [portman](https://github.com/YounGoat/nodejs.portman#portmanportrange),
+the *portRange* argument supports following syntax :
+*   single port  
+    `'8080'`
+*   ports  
+    `'80 443 8080 8443'`
+*   port prefixed with comparator  
+    `'!=8080'`  
+    `'>=8000'`  
+    ...  
+*   hyphenated ports  
+    `'7000 - 8000'`
+*   combination of previous  
+    `'8080 8443 >=9000'`  
+    `'<4000 || >=6000'`  
+
 ```
 
 # Find a free port
 
 ```ts
-export interface FindFreePortOptions extends TestPortOptions {
+interface FindFreePortOptions extends TestPortOptions {
     portMin?: number;
     portMax?: number;
 }
 
-export function findFreePort(options?: FindFreePortOptions): Promise<number>;
+function findFreePort(options?: FindFreePortOptions): Promise<number>;
 ```
 
 # Find multiple free ports
 
 ```ts
-export interface FindMultipleFreePortsOptions extends FindFreePortOptions {
+interface FindMultipleFreePortsOptions extends FindFreePortOptions {
+    rangeSlice?: number;
 }
 
-export function findMultipleFreePorts(count: number, options?: FindFreePortOptions): Promise<number[]>;
+function findMultipleFreePorts(count: number, options?: FindFreePortOptions): Promise<number[]>;
 ```
 
 # MIT License
