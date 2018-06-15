@@ -1,40 +1,50 @@
 import { testPort } from './test-port';
 import { FindFreePortOptions } from './find-free-port';
-import { basePort, basePortMin, basePortMax } from './constants';
+import { basePort, basePortMin, basePortMax, defaultRangeSlice } from './constants';
 
 export interface FindMultipleFreePortsOptions extends FindFreePortOptions {
+    rangeSlice?: number;
 }
 
-function _findMultipleFreePorts(results: number[], port: number, options?: FindMultipleFreePortsOptions): Promise<number[]> {
+function _findMultipleFreePorts(count: number, port: number, options?: FindMultipleFreePortsOptions): Promise<number[]> {
     return new Promise<number[]>((resolve, reject) => {
-        if (port <= options.portMax) {
-            let promiseResults: Promise<number>[] = [];
-            for (let i = 0, l = results.length; i < l; ++i) {
-                if (results[i] == null) {
-                    let p = new Promise<number>((resolve, reject) => {
-                        testPort(port + i, options)
-                        .then((port) => {
-                            results[i] = port;
-                            resolve();
-                        })
-                        .catch((err) => {
-                            resolve();
-                        });
-                    });
-                    promiseResults.push(p);
-                }
+        let outOfPorts = false;
+        let promiseResults: Promise<number>[] = [];
+        for (let i = 0, l = options.rangeSlice; i < l; ++i) {
+            if (count === 0) {
+                break;
             }
-            if (promiseResults.length === 0) {
-                return resolve(results);
+            if (port > options.portMax) {
+                outOfPorts = true;
+                break;
             }
-            return Promise.all(promiseResults)
-            .then(() => {
-                resolve(_findMultipleFreePorts(results, port + promiseResults.length, options));
+            let p = new Promise<number>((resolve, reject) => {
+                testPort(port, options)
+                .then((port) => {
+                    resolve(port);
+                })
+                .catch((err) => {
+                    resolve(null);
+                });
             });
+            promiseResults.push(p);
+            ++port;
+            --count;
         }
-        else {
-            resolve(results);
+        if (promiseResults.length === 0) {
+            return resolve([]);
         }
+        return Promise.all(promiseResults)
+        .then((results) => {
+            results = results.filter(port => !!port);
+            if (outOfPorts || (count === 0)) {
+                resolve(results);
+            }
+            _findMultipleFreePorts(count, port, options)
+            .then((remainingResults) => {
+                resolve(results.concat(remainingResults));
+            });
+        });
     });
 }
 
@@ -50,6 +60,6 @@ export function findMultipleFreePorts(count: number, options?: FindMultipleFreeP
     else {
         options.portMax = Math.min(basePortMax, options.portMin - options.portMax);
     }
-    let results: number[] = new Array(count);
-    return _findMultipleFreePorts(results, options.portMin, options);
+    options.rangeSlice = options.rangeSlice || defaultRangeSlice;
+    return _findMultipleFreePorts(count, options.portMin, options);
 }

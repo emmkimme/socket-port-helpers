@@ -1,56 +1,61 @@
-import { testPort, TestPortOptions } from './test-port';
+import { TestPortRangeOptions } from './test-port-range';
+import { testPort } from './test-port';
 
-import { basePort, basePortMax } from './constants';
+import { basePort, basePortMax, defaultRangeSlice } from './constants';
 
 const portman = require('portman');
 
-export interface FindFreePortRangeOptions extends TestPortOptions {
-    rangePort?: string;
+export interface FindFreePortRangeOptions extends TestPortRangeOptions {
+    portRange?: string;
 }
 
-function testMultiplePortsRange(results: number[], range: any, options?: FindFreePortRangeOptions): Promise<number[]> {
+function _findFreePortRange(count: number, range: any, options?: FindFreePortRangeOptions): Promise<number[]> {
     return new Promise<number[]>((resolve, reject) => {
         let outOfPorts = false;
         let promiseResults: Promise<number>[] = [];
-        for (let i = 0, l = results.length; i < l; ++i) {
-            if (results[i] == null) {
-                let port = range.next();
-                if (port == null) {
-                    outOfPorts = true;
-                    break;
-                }
-                let p = new Promise<number>((resolve, reject) => {
-                    testPort(port, options)
-                    .then((port) => {
-                        results[i] = port;
-                        resolve();
-                    })
-                    .catch((err) => {
-                        resolve();
-                    });
-                });
-                promiseResults.push(p);
+        for (let i = 0, l = options.rangeSlice; i < l; ++i) {
+            if (count === 0) {
+                break;
             }
+            let port = range.next();
+            if (port == null) {
+                outOfPorts = true;
+                break;
+            }
+            let p = new Promise<number>((resolve, reject) => {
+                testPort(port, options)
+                .then((port) => {
+                    resolve(port);
+                })
+                .catch((err) => {
+                    resolve(null);
+                });
+            });
+            promiseResults.push(p);
+            ++port;
+            --count;
         }
         if (promiseResults.length === 0) {
-            return resolve(results);
+            return resolve([]);
         }
         return Promise.all(promiseResults)
-        .then(() => {
-            if (outOfPorts) {
+        .then((results) => {
+            results = results.filter(port => !!port);
+            if (outOfPorts || (count === 0)) {
                 resolve(results);
             }
-            else {
-                resolve(testMultiplePortsRange(results, range, options));
-            }
+            _findFreePortRange(count, range, options)
+            .then((remainingResults) => {
+                resolve(results.concat(remainingResults));
+            });
         });
     });
 }
 
 export function findFreePortRange(count: number, options?: FindFreePortRangeOptions): Promise<number[]> {
     options = options || {};
-    options.rangePort = options.rangePort || `${basePort}-${basePortMax}`;
-    let results: number[] = new Array(count);
-    return testMultiplePortsRange(results, new portman.PortRange(options.rangePort), options);
+    options.portRange = options.portRange || `${basePort}-${basePortMax}`;
+    options.rangeSlice = options.rangeSlice || defaultRangeSlice;
+    return _findFreePortRange(count, new portman.PortRange(options.portRange), options);
 }
 

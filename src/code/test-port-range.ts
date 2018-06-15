@@ -1,6 +1,6 @@
 import { testPort, TestPortOptions } from './test-port';
 
-import { basePort, basePortMax } from './constants';
+import { basePort, basePortMax, defaultRangeSlice } from './constants';
 
 const portman = require('portman');
 
@@ -56,11 +56,11 @@ function _testPortRange(results: TestRangeResults, range: any, options?: TestPor
     });
 }
 
-export function testPortRange(rangePort: string, options?: TestPortRangeOptions): Promise<TestRangeResults> {
+export function testPortRange(portRange: string, options?: TestPortRangeOptions): Promise<TestRangeResults> {
     options = options || {};
-    rangePort = rangePort || `${basePort}-${basePortMax}`;
-    options.rangeSlice = options.rangeSlice || 5;
+    portRange = portRange || `${basePort}-${basePortMax}`;
+    options.rangeSlice = options.rangeSlice || defaultRangeSlice;
     let results: TestRangeResults = { results: [] };
-    return _testPortRange(results, new portman.PortRange(rangePort), options);
+    return _testPortRange(results, new portman.PortRange(portRange), options);
 }
 
