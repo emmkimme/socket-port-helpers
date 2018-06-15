@@ -1,6 +1,6 @@
 {
   "name": "socket-port-helpers",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A serializer of object, buffer, string, number and boolean for socket.",
   "repository": {
     "type": "git",
@@ -35,7 +35,7 @@
     }
   ],
   "main": "./lib/socket-port-helpers.js",
-  "browser": "./lib/socket-port-helpers-browser.js",
+  "browser": "false",
   "types": "./lib/socket-port-helpers.d.ts",
   "devDependencies": {
     "@types/node": "0.0.3",

@@ -1,17 +1,18 @@
 import * as net from 'net';
 
-const timeoutDelay = 500;
-const handshakeData = 'Hello you !';
+import { defaultTimeoutDelay, handshakeData } from './constants';
 
 export interface TestPortOptions {
     hostname?: string;
     log?: boolean;
     testConnection?: boolean;
     testData?: boolean;
+    timeoutDelay?: number;
 }
 
 export function testPort(port: number, options?: TestPortOptions): Promise<number> {
     options = options || {};
+    options.timeoutDelay = options.timeoutDelay || defaultTimeoutDelay;
     options.testConnection = options.testConnection || options.testData;
     return new Promise<number>((resolve, reject) => {
         let server = net.createServer();
@@ -44,8 +45,8 @@ export function testPort(port: number, options?: TestPortOptions): Promise<numbe
 
         timer = setTimeout(() => {
             timer = null;
-            fulfilled(false, `Test port ${port} : server timeout ${timeoutDelay}ms`);
-        }, timeoutDelay);
+            fulfilled(false, `Test port ${port} : server timeout ${options.timeoutDelay}ms`);
+        }, options.timeoutDelay);
 
         server.addListener('listening', () => {
             if (!options.testConnection) {

@@ -1,9 +1,8 @@
 import { testPort, TestPortOptions } from './test-port';
 
-// https://en.wikipedia.org/wiki/Ephemeral_port
-let basePort: number = 49152;
-let basePortMin: number = 0;
-let basePortMax: number = 65534;
+import { basePort, basePortMin, basePortMax } from './constants';
+
+
 // function invert(p: Promise<any>): Promise<any> {
 //     return new Promise<any>((res, rej) => p.then(rej, res));
 // }
@@ -47,3 +46,4 @@ export function findFreePort(options?: FindFreePortOptions): Promise<number> {
     }
     return testPortRange(options.portMin, options);
 }
+
