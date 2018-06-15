@@ -1,6 +1,6 @@
 const socketPortHelper = require('../lib/socket-port-helpers');
 
-describe('find-free-port', function () {
+describe('find-free-port', () => {
   it(`basic`, (done) => {
     socketPortHelper.findFreePort({ log: true, portMax: -50 })
       .then((port) => {

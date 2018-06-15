@@ -3,7 +3,7 @@ A javascript helpers for socket.
 
 # Features
 * Test a port
-* Look for a free port
+* Look for one or multiple free port/s
 
 # Installation
 ```Batchfile
@@ -35,6 +35,15 @@ export interface FindFreePortOptions extends TestPortOptions {
 }
 
 export function findFreePort(options?: FindFreePortOptions): Promise<number>;
+```
+
+# Find multiple free ports
+
+```ts
+export interface FindMultipleFreesPortOptions extends FindFreePortOptions {
+}
+
+export function findMultipleFreePorts(count: number, options?: FindFreePortOptions): Promise<number[]>;
 ```
 
 # MIT License

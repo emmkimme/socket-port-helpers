@@ -3,7 +3,7 @@ const socketPortHelper = require('../lib/socket-port-helpers');
 const portMin = 49152;
 const portMax = portMin + 10;
 
-describe('test-port', function () {
+describe('test-port', () => {
   it(`test ports from  `, (done) => {
     let pendingResults = (portMax - portMin);
     let portResults = new Array(pendingResults);

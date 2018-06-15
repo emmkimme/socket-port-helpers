@@ -8,11 +8,11 @@ export interface FindFreePortsOptions extends FindFreePortOptions {
 function testMultiplePortsRange(results: number[], port: number, options?: FindFreePortsOptions): Promise<number[]> {
     return new Promise<number[]>((resolve, reject) => {
         if (port <= options.portMax) {
-            let promiseResults: Promise<number>[];
+            let promiseResults: Promise<number>[] = [];
             for (let i = 0, l = results.length; i < l; ++i) {
                 if (results[i] == null) {
                     let p = new Promise<number>((resolve, reject) => {
-                        testPort(port, options)
+                        testPort(port + i, options)
                         .then((port) => {
                             results[i] = port;
                             resolve();
