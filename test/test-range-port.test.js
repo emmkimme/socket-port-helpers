@@ -11,6 +11,6 @@ describe('test-range-port', () => {
     });
   }
 
-  testPortRange('7000-7100');
+  testPortRange('7000-7010');
 });
 

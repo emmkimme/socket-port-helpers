@@ -1,6 +1,6 @@
 
-export * from './code/test-port';
-export * from './code/find-free-port';
-export * from './code/find-multiple-free-ports';
-export * from './code/test-port-range';
-export * from './code/find-free-port-range';
+export * from './code/test-port-impl';
+export * from './code/find-free-port-impl';
+export * from './code/find-multiple-free-ports-impl';
+export * from './code/test-port-range-impl';
+export * from './code/find-free-port-range-impl';
