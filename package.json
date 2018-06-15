@@ -1,7 +1,7 @@
 {
   "name": "socket-port-helpers",
   "version": "1.0.0",
-  "description": "A serializer of object, buffer, string, number and boolean for socket.",
+  "description": "Helpers for checking ports.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/emmkimme/socket-port-helpers.git"
