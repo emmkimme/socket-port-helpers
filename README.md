@@ -17,6 +17,12 @@ Dependencies
 # Test a port
 
 ```ts
+interface TestPortResult {
+    port: number;
+    err?: Error;        // If the port is not reachable on time, this member contains the error
+    errMsg?: string;
+}
+
 interface TestPortOptions {
     hostname?: string;
     log?: boolean;
@@ -25,7 +31,7 @@ interface TestPortOptions {
     timeoutDelay?: number;          // Delay before stopping the test
 }
 
-function testPort(port: number, options?: TestPortOptions): Promise<number>;
+function testPort(port: number, options?: TestPortOptions): Promise<TestPortResult>;
 ```
 
 # Test multiple ports
@@ -35,17 +41,10 @@ interface TestPortRangeOptions extends TestPortOptions {
     rangeSlice?: number;            // test of ports is divided in slice
 }
 
-interface TestRangeResult {
-    port: number;
-    err?: Error;
-    errMsg?: string;
-}
+testPortRange(portRange: string, options?: TestPortRangeOptions): Promise<TestRangeResult[];
+```
 
-testPortRangeFunction(portRange: string, options?: TestPortRangeOptions): Promise<TestRangeResult[];
-
-Thanks to the package [portman](https://github.com/YounGoat/nodejs.portman#portmanportrange "portman")
-
-the *portRange* argument supports following syntax :
+Thanks to the package [portman](https://github.com/YounGoat/nodejs.portman#portmanportrange "portman"), the *portRange* argument supports following syntax :
 *   single port  
     `'8080'`
 *   ports  
@@ -60,7 +59,6 @@ the *portRange* argument supports following syntax :
     `'8080 8443 >=9000'`  
     `'<4000 || >=6000'`  
 
-```
 
 # Find a free port
 
@@ -71,6 +69,7 @@ interface FindFirstFreePortOptions extends TestPortOptions {
 
 function findFirstFreePort(options?: FindFirstFreePortOptions): Promise<number>;
 ```
+Returns *null* if failed to find a free port else the free port number.
 
 # Find multiple free ports
 
@@ -78,8 +77,9 @@ function findFirstFreePort(options?: FindFirstFreePortOptions): Promise<number>;
 interface FindFreePortRangeOptions extends FindFreePortOptions {
 }
 
-function findFreePortRange(count: number, options?: FindFreePortOptions): Promise<number[]>;
+function findFreePortRange(count: number, options?: FindFreePortRangeOptions): Promise<number[]>;
 ```
+The returned array length is shorter than *count*, if we can not find the expected number of free ports.
 
 # MIT License
 
