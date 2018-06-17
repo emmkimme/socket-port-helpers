@@ -32,7 +32,7 @@ export let testPort: TestPortFunction = (port: number, options?: TestPortOptions
             else {
                 options.log && console.error(`${msg} - ${err}`);
                 server.close();
-                reject({ port, err, errMsg: msg });
+                reject({ port, err, errMsg: err.message });
             }
         };
 

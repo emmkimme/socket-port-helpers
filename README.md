@@ -2,7 +2,7 @@
 A javascript helpers for socket.
 
 # Features
-* Test a port
+* Test one or multiple port/s
 * Look for one or multiple free port/s
 
 # Installation
@@ -43,7 +43,8 @@ interface TestRangeResult {
 
 testPortRangeFunction(portRange: string, options?: TestPortRangeOptions): Promise<TestRangeResult[];
 
-Thanks to the package [portman](https://github.com/YounGoat/nodejs.portman#portmanportrange),
+Thanks to the package [portman](https://github.com/YounGoat/nodejs.portman#portmanportrange "portman")
+
 the *portRange* argument supports following syntax :
 *   single port  
     `'8080'`
@@ -64,11 +65,11 @@ the *portRange* argument supports following syntax :
 # Find a free port
 
 ```ts
-interface FindFreePortOptions extends TestPortOptions {
+interface FindFirstFreePortOptions extends TestPortOptions {
     portRange?: string;
 }
 
-function findFirstFreePort(options?: FindFreePortOptions): Promise<number>;
+function findFirstFreePort(options?: FindFirstFreePortOptions): Promise<number>;
 ```
 
 # Find multiple free ports
