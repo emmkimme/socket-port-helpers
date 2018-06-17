@@ -10,7 +10,7 @@ describe('test-port', () => {
     new Promise((resolve, reject) => {
       for (let port = portMin; port < portMax; ++port) {
         let index = port - portMin;
-        socketPortHelper.testPort(port, { log: false, testDataToSocket: true })
+        socketPortHelper.testPort(port, { log: false, testDataTransfer: true })
         .then(() => {
           let msg = `=> Test port ${port} : Success`;
           portResults[index] = msg;

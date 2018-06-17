@@ -28,7 +28,7 @@ describe('find-free-port-range', () => {
   });
 
   it(`advanced - test data`, (done) => {
-    socketPortHelper.findFreePortRange(20, { testDataToSocket: true, log: false, portMax: -50 })
+    socketPortHelper.findFreePortRange(20, { testDataTransfer: true, log: false, portMax: -50 })
       .then((ports) => {
         for (let i = 0, l = ports.length; i < l; ++i) {
           console.log(`${i} - find port ${ports[i]}`);

@@ -21,7 +21,7 @@ interface TestPortOptions {
     hostname?: string;
     log?: boolean;
     testConnection?: boolean;       // Connect a socket
-    testDataToSocket?: boolean;     // Send data to socket
+    testDataTransfer?: boolean;     // Send data to socket
     timeoutDelay?: number;          // Delay before stopping the test
 }
 

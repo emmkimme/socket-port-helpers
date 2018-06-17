@@ -24,7 +24,7 @@ describe('find-fist-free-port', () => {
   });
 
   it(`advanced - test data`, (done) => {
-    socketPortHelper.findFirstFreePort({ testDataToSocket: true, log: false, portMax: -50 })
+    socketPortHelper.findFirstFreePort({ testDataTransfer: true, log: false, portMax: -50 })
       .then((port) => {
         console.log(`find port ${port}`);
         done();

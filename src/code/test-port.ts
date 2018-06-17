@@ -2,8 +2,7 @@ export interface TestPortOptions {
     hostname?: string;
     log?: boolean;
     testConnection?: boolean;
-    testDataToSocket?: boolean;
-    testDataToServer?: boolean;
+    testDataTransfer?: boolean;
     timeoutDelay?: number;
 }
 

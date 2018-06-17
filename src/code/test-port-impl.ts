@@ -6,7 +6,7 @@ import { TestPortFunction, TestPortOptions, TestPortResult } from './test-port';
 export let testPort: TestPortFunction = (port: number, options?: TestPortOptions) => {
     options = options || {};
     options.timeoutDelay = options.timeoutDelay || defaultTimeoutDelay;
-    options.testConnection = options.testConnection || options.testDataToSocket;
+    options.testConnection = options.testConnection || options.testDataTransfer;
     return new Promise<TestPortResult>((resolve, reject) => {
         let server = net.createServer();
         let socket: net.Socket;
@@ -50,7 +50,7 @@ export let testPort: TestPortFunction = (port: number, options?: TestPortOptions
             options.log && console.log(`Port ${port} : server listening`);
             options.log && console.log(`Port ${port} : connect socket`);
             socket = net.createConnection(port, options.hostname);
-            if (options.testDataToSocket) {
+            if (options.testDataTransfer) {
                 // https://nodejs.org/api/net.html#net_event_data
                 socket.addListener('data', (buff: Buffer) => {
                     if (buff.toString() === handshakeData) {
@@ -80,7 +80,7 @@ export let testPort: TestPortFunction = (port: number, options?: TestPortOptions
         });
         // https://nodejs.org/api/net.html#net_event_connection
         server.addListener('connection', (socket: net.Socket) => {
-            if (!options.testDataToSocket) {
+            if (!options.testDataTransfer) {
                 fulfilled(true, `Port ${port} : socket connected`);
                 return;
             }
