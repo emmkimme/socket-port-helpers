@@ -1,7 +1,7 @@
-import { TestPortRangeOptions } from './test-port-range';
+import { FindFirstFreePortOptions } from './find-first-free-port';
 
-export interface FindFreePortRangeOptions extends TestPortRangeOptions {
-    portRange?: string;
+
+export interface FindFreePortRangeOptions extends FindFirstFreePortOptions {
 }
 
 export interface FindFreePortRangeFunction {

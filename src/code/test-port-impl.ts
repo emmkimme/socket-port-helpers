@@ -1,13 +1,13 @@
 import * as net from 'net';
 
 import { defaultTimeoutDelay, handshakeData } from './constants';
-import { TestPortFunction, TestPortOptions} from './test-port';
+import { TestPortFunction, TestPortOptions, TestPortResult } from './test-port';
 
 export let testPort: TestPortFunction = (port: number, options?: TestPortOptions) => {
     options = options || {};
     options.timeoutDelay = options.timeoutDelay || defaultTimeoutDelay;
-    options.testConnection = options.testConnection || options.testData;
-    return new Promise<number>((resolve, reject) => {
+    options.testConnection = options.testConnection || options.testDataToSocket;
+    return new Promise<TestPortResult>((resolve, reject) => {
         let server = net.createServer();
         let socket: net.Socket;
         let timer: NodeJS.Timer;
@@ -26,13 +26,13 @@ export let testPort: TestPortFunction = (port: number, options?: TestPortOptions
                 options.log && console.log(msg);
                 // Close the server before sending the success
                 server.close(() => {
-                    resolve(port);
+                    resolve({ port });
                 });
             }
             else {
                 options.log && console.error(`${msg} - ${err}`);
                 server.close();
-                reject(err);
+                reject({ port, err, errMsg: msg });
             }
         };
 
@@ -50,7 +50,7 @@ export let testPort: TestPortFunction = (port: number, options?: TestPortOptions
             options.log && console.log(`Port ${port} : server listening`);
             options.log && console.log(`Port ${port} : connect socket`);
             socket = net.createConnection(port, options.hostname);
-            if (options.testData) {
+            if (options.testDataToSocket) {
                 // https://nodejs.org/api/net.html#net_event_data
                 socket.addListener('data', (buff: Buffer) => {
                     if (buff.toString() === handshakeData) {
@@ -80,12 +80,12 @@ export let testPort: TestPortFunction = (port: number, options?: TestPortOptions
         });
         // https://nodejs.org/api/net.html#net_event_connection
         server.addListener('connection', (socket: net.Socket) => {
-            if (!options.testData) {
+            if (!options.testDataToSocket) {
                 fulfilled(true, `Port ${port} : socket connected`);
                 return;
             }
             options.log && console.log(`Port ${port} : socket connected`);
-            options.log && console.log(`Port ${port} : server sends data`);
+            options.log && console.log(`Port ${port} : server sends data to socket`);
             let buff = Buffer.from(handshakeData);
             socket.write(buff);
         });

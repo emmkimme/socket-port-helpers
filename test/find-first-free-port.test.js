@@ -1,8 +1,8 @@
 const socketPortHelper = require('../lib/socket-port-helpers');
 
-describe('find-free-port', () => {
-  it(`basic`, (done) => {
-    socketPortHelper.findFreePort({ log: true, portMax: -50 })
+describe('find-fist-free-port', () => {
+  it(`basic - search free por in range '7000-8000'`, (done) => {
+    socketPortHelper.findFirstFreePort({ portRange: '7000-8000', log: false, portMax: -50 })
       .then((port) => {
         console.log(`find port ${port}`);
         done();
@@ -13,7 +13,7 @@ describe('find-free-port', () => {
   });
 
   it(`advanced - test connection`, (done) => {
-    socketPortHelper.findFreePort({ testConnection: true, log: true, portMax: -50 })
+    socketPortHelper.findFirstFreePort({ testConnection: true, log: false, portMax: -50 })
       .then((port) => {
         console.log(`find port ${port}`);
         done();
@@ -24,7 +24,7 @@ describe('find-free-port', () => {
   });
 
   it(`advanced - test data`, (done) => {
-    socketPortHelper.findFreePort({ testData: true, log: true, portMax: -50 })
+    socketPortHelper.findFirstFreePort({ testDataToSocket: true, log: false, portMax: -50 })
       .then((port) => {
         console.log(`find port ${port}`);
         done();

@@ -20,9 +20,9 @@ Dependencies
 interface TestPortOptions {
     hostname?: string;
     log?: boolean;
-    testConnection?: boolean;
-    testData?: boolean;
-    timeoutDelay?: number;
+    testConnection?: boolean;       // Connect a socket
+    testDataToSocket?: boolean;     // Send data to socket
+    timeoutDelay?: number;          // Delay before stopping the test
 }
 
 function testPort(port: number, options?: TestPortOptions): Promise<number>;
@@ -32,12 +32,11 @@ function testPort(port: number, options?: TestPortOptions): Promise<number>;
 
 ```ts
 interface TestPortRangeOptions extends TestPortOptions {
-    rangeSlice?: number;
+    rangeSlice?: number;            // test of ports is divided in slice
 }
 
 interface TestRangeResult {
     port: number;
-    free: boolean;
     err?: Error;
     errMsg?: string;
 }
@@ -66,21 +65,19 @@ the *portRange* argument supports following syntax :
 
 ```ts
 interface FindFreePortOptions extends TestPortOptions {
-    portMin?: number;
-    portMax?: number;
+    portRange?: string;
 }
 
-function findFreePort(options?: FindFreePortOptions): Promise<number>;
+function findFirstFreePort(options?: FindFreePortOptions): Promise<number>;
 ```
 
 # Find multiple free ports
 
 ```ts
-interface FindMultipleFreePortsOptions extends FindFreePortOptions {
-    rangeSlice?: number;
+interface FindFreePortRangeOptions extends FindFreePortOptions {
 }
 
-function findMultipleFreePorts(count: number, options?: FindFreePortOptions): Promise<number[]>;
+function findFreePortRange(count: number, options?: FindFreePortOptions): Promise<number[]>;
 ```
 
 # MIT License

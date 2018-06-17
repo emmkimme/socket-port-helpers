@@ -2,10 +2,17 @@ export interface TestPortOptions {
     hostname?: string;
     log?: boolean;
     testConnection?: boolean;
-    testData?: boolean;
+    testDataToSocket?: boolean;
+    testDataToServer?: boolean;
     timeoutDelay?: number;
 }
 
+export interface TestPortResult {
+    port: number;
+    err?: Error;
+    errMsg?: string;
+}
+
 export interface TestPortFunction {
-    (port: number, options?: TestPortOptions): Promise<number>;
+    (port: number, options?: TestPortOptions): Promise<TestPortResult>;
 }
