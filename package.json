@@ -1,6 +1,6 @@
 {
   "name": "socket-port-helpers",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Helpers for checking ports.",
   "repository": {
     "type": "git",
@@ -56,7 +56,6 @@
     "build-js": "tsc -p ./tsconfig/tsconfig-js.json",
     "build-declaration": "npm run build-declaration-ts && npm run build-declaration-dts-bundle && npm run clean-declaration-dts",
     "build-declaration-ts": "tsc -p ./tsconfig/tsconfig-declaration.json",
-    "build-declaration-dts-generator": "dts-generator --name socket-port-helpers --project . --out ./lib/index.d.ts",
     "build-declaration-dts-bundle": "dts-bundle --outputAsModuleFolder --name socket-port-helpers --main ./lib/socket-port-helpers.d.ts",
     "clean-declaration-dts": "del-cli ./lib/code/*.d.ts",
     "test": "mocha test --recursive",

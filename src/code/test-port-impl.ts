@@ -24,15 +24,16 @@ export let testPort: TestPortFunction = (port: number, options?: TestPortOptions
             }
             if (success) {
                 options.log && console.log(msg);
-                // Close the server before sending the success
+                // Close the server before sending the success, if close fails I'm in deep trouble (another timeout?)
                 server.close(() => {
                     resolve({ port });
                 });
             }
             else {
+                // Just close the server and without loosing time, jump to the next action
                 options.log && console.error(`${msg} - ${err}`);
                 server.close();
-                reject({ port, err, errMsg: err.message });
+                resolve({ port, err, errMsg: err.message });
             }
         };
 

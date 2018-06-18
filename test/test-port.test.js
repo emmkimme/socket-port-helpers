@@ -1,7 +1,7 @@
 const socketPortHelper = require('../lib/socket-port-helpers');
 
 const portMin = 49152;
-const portMax = portMin + 10;
+const portMax = 49170;
 
 describe('test-port', () => {
   it(`test ports from  `, (done) => {
@@ -11,15 +11,15 @@ describe('test-port', () => {
       for (let port = portMin; port < portMax; ++port) {
         let index = port - portMin;
         socketPortHelper.testPort(port, { log: false, testDataTransfer: true })
-        .then(() => {
-          let msg = `=> Test port ${port} : Success`;
+        .then((portResult) => {
+          let msg = `=> Test port ${portResult.port} : ${portResult.err ? portResult.err.message : 'available'}`;
           portResults[index] = msg;
           if (--pendingResults === 0) {
             resolve();
           }
         })
         .catch((err) => {
-          let msg = `=> Test port ${port} : ${err}`;
+          let msg = `=> Test port ${port} : failed ${err}`;
           portResults[index] = msg;
           if (--pendingResults === 0) {
             resolve();

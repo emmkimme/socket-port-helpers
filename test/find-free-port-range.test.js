@@ -5,7 +5,7 @@ describe('find-free-port-range', () => {
     socketPortHelper.findFreePortRange(20, { portRange:'7000-8000', log: false, portMax: -50 })
       .then((ports) => {
         for (let i = 0, l = ports.length ; i < l; ++i) {
-          console.log(`${i} - find port ${ports[i]}`);
+          console.log(`${i} - find free port ${ports[i]}`);
         }
         done();
       })
@@ -18,7 +18,7 @@ describe('find-free-port-range', () => {
     socketPortHelper.findFreePortRange(20, { testConnection: true, log: false, portMax: -50 })
       .then((ports) => {
         for (let i = 0, l = ports.length; i < l; ++i) {
-          console.log(`${i} - find port ${ports[i]}`);
+          console.log(`${i} - find free port ${ports[i]}`);
         }
         done();
       })
@@ -31,7 +31,7 @@ describe('find-free-port-range', () => {
     socketPortHelper.findFreePortRange(20, { testDataTransfer: true, log: false, portMax: -50 })
       .then((ports) => {
         for (let i = 0, l = ports.length; i < l; ++i) {
-          console.log(`${i} - find port ${ports[i]}`);
+          console.log(`${i} - find free port ${ports[i]}`);
         }
         done();
       })
