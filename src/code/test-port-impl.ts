@@ -6,9 +6,13 @@ import { TestPortFunction, TestPortOptions, TestPortResult } from './test-port';
 export let testPort: TestPortFunction = (port: number, options?: TestPortOptions) => {
     options = options || {};
     options.timeoutDelay = options.timeoutDelay || defaultTimeoutDelay;
+    // We need to test the connection before if we test data transfer !
     options.testConnection = options.testConnection || options.testDataTransfer;
     return new Promise<TestPortResult>((resolve, reject) => {
         let server = net.createServer();
+        // https://nodejs.org/api/net.html#net_server_unref
+        server.unref();
+
         let socket: net.Socket;
         let timer: NodeJS.Timer;
 
