@@ -1,6 +1,6 @@
 {
   "name": "socket-port-helpers",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Helpers for checking ports.",
   "repository": {
     "type": "git",
@@ -39,7 +39,7 @@
   "browser": "false",
   "types": "./lib/socket-port-helpers.d.ts",
   "devDependencies": {
-    "@types/node": "0.0.3",
+    "@types/node": "^10.12.10",
     "chai": "^4.1.2",
     "del": "^2.2.2",
     "del-cli": "^0.2.1",
@@ -48,7 +48,7 @@
     "sinon": "^4.0.1",
     "tslint": "^4.1.1",
     "tslint-microsoft-contrib": "^4.0.1",
-    "typescript": "^2.5.3"
+    "typescript": "^3.1.6"
   },
   "scripts": {
     "clean": "del-cli ./lib ./build ./dist",

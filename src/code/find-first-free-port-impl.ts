@@ -5,52 +5,54 @@ import { basePort, basePortMax, defaultRangeSlice } from './constants';
 
 const portman = require('portman');
 
-
-function invert(p: Promise<any>): Promise<any> {
-    return new Promise<any>((res, rej) => p.then(rej, res));
-}
-
 function _findFirstFreePort(range: any, options?: FindFirstFreePortOptions): Promise<number> {
     return new Promise<number>((resolve, reject) => {
-        let outOfPorts = false;
-        let promiseResults: Promise<number>[] = [];
+        let ports: number[] = [];
         for (let i = 0, l = options.rangeSlice; i < l; ++i) {
             let port = range.next();
             if (port == null) {
-                outOfPorts = true;
                 break;
             }
+            ports.push(port);
+        }
+
+        if (ports.length === 0) {
+            return resolve(null);
+        }
+
+        let counter = 0;
+        let fullfilled = (value: number) => {
+            if (value) {
+                return resolve(value);
+            }
+            if (++counter >= ports.length) {
+                if (ports.length < options.rangeSlice) {
+                    resolve(null);
+                }
+                else {
+                    resolve(_findFirstFreePort(range, options));
+                }
+            }
+        };
+
+        let promiseResults: Promise<number>[] = [];
+        for (let i = 0, l = ports.length; i < l; ++i) {
             let p = new Promise<number>((resolve, reject) => {
-                testPort(port, options)
+                testPort(ports[i], options)
                 .then((portResult) => {
                     if (portResult.err) {
-                        reject(portResult.err);
+                        fullfilled(null);
                     }
                     else {
-                        resolve(portResult.port)
+                        fullfilled(portResult.port);
                     }
                 })
                 .catch((err) => {
-                    reject(err);
+                    fullfilled(null);
                 });
             });
             promiseResults.push(p);
         }
-        if (promiseResults.length === 0) {
-            return resolve(null);
-        }
-        return invert(Promise.all(promiseResults.map(invert)))
-        .then((port) => {
-            resolve(port);
-        })
-        .catch((err) => {
-            if (outOfPorts) {
-                resolve(null);
-            }
-            else {
-                resolve(_findFirstFreePort(range, options));
-            }
-        });
     });
 }
 
