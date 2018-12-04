@@ -31,6 +31,7 @@ function _findFreePortRange(remainingCount: number, range: any, options?: FindFr
                     }
                 })
                 .catch((err) => {
+                    resolve(null);
                 });
             });
             promiseResults.push(p);

@@ -35,23 +35,19 @@ function _findFirstFreePort(range: any, options?: FindFirstFreePortOptions): Pro
             }
         };
 
-        let promiseResults: Promise<number>[] = [];
         for (let i = 0, l = ports.length; i < l; ++i) {
-            let p = new Promise<number>((resolve, reject) => {
-                testPort(ports[i], options)
-                .then((portResult) => {
-                    if (portResult.err) {
-                        fullfilled(null);
-                    }
-                    else {
-                        fullfilled(portResult.port);
-                    }
-                })
-                .catch((err) => {
+            testPort(ports[i], options)
+            .then((portResult) => {
+                if (portResult.err) {
                     fullfilled(null);
-                });
+                }
+                else {
+                    fullfilled(portResult.port);
+                }
+            })
+            .catch((err) => {
+                fullfilled(null);
             });
-            promiseResults.push(p);
         }
     });
 }
