@@ -14,6 +14,36 @@ Dependencies
 * http://nodejs.org/
 * https://github.com/YounGoat/nodejs.portman
 
+# Samples
+
+Find the first free port available (test data transfer)
+```js
+const socketPortHelper = require('socket-port-helpers');
+
+socketPortHelper.findFirstFreePort({ testDataTransfer: true, log: false })
+    .then((port) => {
+    console.log(`first free port ${port}`);
+    })
+    .catch((err) => {
+    });
+});
+ ```
+
+Find 20 free ports in the range [7000-8000]. 5 Ports are tested in parallel.
+```js
+const socketPortHelper = require('socket-port-helpers');
+
+socketPortHelper.findFreePortRange(20, { portRange:'7000-8000', log: false, rangeSlice: 5 })
+.then((ports) => {
+    for (let i = 0, l = ports.length ; i < l; ++i) {
+        console.log(`${i} - find free port ${ports[i]}`);
+    }
+ })
+ .catch((err) => {
+ });
+ ```
+
+
 # Test a port
 
 ```ts
@@ -28,7 +58,7 @@ interface TestPortOptions {
     log?: boolean;
     testConnection?: boolean;       // Connect a socket
     testDataTransfer?: boolean;     // Send data to socket
-    timeoutDelay?: number;          // Delay before stopping the test
+    timeoutDelay?: number;          // Delay before stopping the test (default is 500ms)
 }
 
 function testPort(port: number, options?: TestPortOptions): Promise<TestPortResult>;
@@ -38,7 +68,7 @@ function testPort(port: number, options?: TestPortOptions): Promise<TestPortResu
 
 ```ts
 interface TestPortRangeOptions extends TestPortOptions {
-    rangeSlice?: number;            // test of ports is divided in slice
+    rangeSlice?: number;            // test [n] ports in parallel (default is 5)
 }
 
 testPortRange(portRange: string, options?: TestPortRangeOptions): Promise<TestRangeResult[];
@@ -59,6 +89,7 @@ Thanks to the package [portman](https://github.com/YounGoat/nodejs.portman#portm
     `'8080 8443 >=9000'`  
     `'<4000 || >=6000'`  
 
+default range is [49152 - 65534]
 
 # Find a free port
 
