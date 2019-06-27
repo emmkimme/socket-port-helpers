@@ -3,7 +3,7 @@ import * as net from 'net';
 import { defaultTimeoutDelay, handshakeData } from './constants';
 import { TestPortFunction, TestPortOptions, TestPortResult } from './test-port';
 
-export let testPort: TestPortFunction = (port: number, options?: TestPortOptions) => {
+export const testPort: TestPortFunction = (port: number, options?: TestPortOptions) => {
     options = options || {};
     options.timeoutDelay = options.timeoutDelay || defaultTimeoutDelay;
     // We need to test the connection before if we test data transfer !

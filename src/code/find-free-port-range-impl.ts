@@ -6,21 +6,20 @@ import { basePort, basePortMax, defaultRangeSlice } from './constants';
 
 const portman = require('portman');
 
-
-function _findFreePortRange(remainingCount: number, range: any, options?: FindFreePortRangeOptions): Promise<number[]> {
+function _findFreePortRange(remainingCount: number, range: any, options: FindFreePortRangeOptions): Promise<number[]> {
     return new Promise<number[]>((resolve, reject) => {
         let outOfPorts = false;
-        let promiseResults: Promise<number>[] = [];
+        const promiseResults: Promise<number>[] = [];
         for (let i = 0, l = options.rangeSlice; i < l; ++i) {
             if (remainingCount === 0) {
                 break;
             }
-            let port = range.next();
+            const port = range.next();
             if (port == null) {
                 outOfPorts = true;
                 break;
             }
-            let p = new Promise<number>((resolve, reject) => {
+            const p = new Promise<number>((resolve, reject) => {
                 testPort(port, options)
                 .then((portResult) => {
                     if (portResult.err) {
@@ -54,7 +53,7 @@ function _findFreePortRange(remainingCount: number, range: any, options?: FindFr
     });
 }
 
-export let findFreePortRange: FindFreePortRangeFunction = (count: number, options?: FindFreePortRangeOptions) => {
+export const findFreePortRange: FindFreePortRangeFunction = (count: number, options?: FindFreePortRangeOptions) => {
     options = options || {};
     options.portRange = options.portRange || `${basePort}-${basePortMax}`;
     if (!options.rangeSlice || (options.rangeSlice <= 0)) {

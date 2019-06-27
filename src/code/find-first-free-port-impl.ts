@@ -5,27 +5,29 @@ import { basePort, basePortMax, defaultRangeSlice } from './constants';
 
 const portman = require('portman');
 
-function _findFirstFreePort(range: any, options?: FindFirstFreePortOptions): Promise<number> {
+function _findFirstFreePort(range: any, options: FindFirstFreePortOptions): Promise<number> {
     return new Promise<number>((resolve, reject) => {
-        let ports: number[] = [];
+        const ports: number[] = [];
         for (let i = 0, l = options.rangeSlice; i < l; ++i) {
-            let port = range.next();
+            const port = range.next();
             if (port == null) {
                 break;
             }
             ports.push(port);
         }
 
+        // Stop the recurrence no more ports to test
         if (ports.length === 0) {
             return resolve(null);
         }
 
         let counter = 0;
-        let fullfilled = (value: number) => {
+        const fullfilled = (value: number) => {
             if (value) {
                 return resolve(value);
             }
             if (++counter >= ports.length) {
+                // Stop the recurrence no more ports to test
                 if (ports.length < options.rangeSlice) {
                     resolve(null);
                 }

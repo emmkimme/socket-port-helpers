@@ -6,17 +6,17 @@ import { basePort, basePortMax, defaultRangeSlice } from './constants';
 
 const portman = require('portman');
 
-function _testPortRange(results: TestPortResult[], range: any, options?: TestPortRangeOptions): Promise<TestPortResult[]> {
+function _testPortRange(results: TestPortResult[], range: any, options: TestPortRangeOptions): Promise<TestPortResult[]> {
     return new Promise<TestPortResult[]>((resolve, reject) => {
         let outOfPorts = false;
-        let promiseResults: Promise<number>[] = [];
+        const promiseResults: Promise<number>[] = [];
         for (let i = 0, l = options.rangeSlice; i < l; ++i) {
             let port = range.next() as number;
             if (port == null) {
                 outOfPorts = true;
                 break;
             }
-            let p = new Promise<number>((resolve, reject) => {
+            const p = new Promise<number>((resolve, reject) => {
                 testPort(port, options)
                 .then((portResult) => {
                     results.push(portResult);
@@ -43,13 +43,13 @@ function _testPortRange(results: TestPortResult[], range: any, options?: TestPor
     });
 }
 
-export let testPortRange: TestPortRangeFunction = (portRange: string, options?: TestPortRangeOptions) => {
+export const testPortRange: TestPortRangeFunction = (portRange: string, options?: TestPortRangeOptions) => {
     options = options || {};
     portRange = portRange || `${basePort}-${basePortMax}`;
     if (!options.rangeSlice || (options.rangeSlice <= 0)) {
         options.rangeSlice = defaultRangeSlice;
     }
-    let results: TestPortResult[] = [];
+    const results: TestPortResult[] = [];
     return _testPortRange(results, new portman.PortRange(portRange), options);
 }
 
