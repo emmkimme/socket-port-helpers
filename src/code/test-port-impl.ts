@@ -9,14 +9,14 @@ export const testPort: TestPortFunction = (port: number, options?: TestPortOptio
     // We need to test the connection before if we test data transfer !
     options.testConnection = options.testConnection || options.testDataTransfer;
     return new Promise<TestPortResult>((resolve, reject) => {
-        let server = net.createServer();
+        const server = net.createServer();
         // https://nodejs.org/api/net.html#net_server_unref
         server.unref();
 
         let socket: net.Socket;
         let timer: NodeJS.Timer;
 
-        let fulfilled = (success: boolean, msg: string, err?: Error) => {
+        const fulfilled = (success: boolean, msg: string, err?: Error) => {
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -91,7 +91,7 @@ export const testPort: TestPortFunction = (port: number, options?: TestPortOptio
             }
             options.log && console.log(`Port ${port} : socket connected`);
             options.log && console.log(`Port ${port} : server sends data to socket`);
-            let buff = Buffer.from(handshakeData);
+            const buff = Buffer.from(handshakeData);
             socket.write(buff);
         });
         // https://nodejs.org/api/net.html#net_event_close
