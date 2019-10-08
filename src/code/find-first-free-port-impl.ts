@@ -55,7 +55,7 @@ function _findFirstFreePort(range: any, options: FindFirstFreePortOptions): Prom
 }
 
 
-export let findFirstFreePort: FindFirstFreePortFunction = (options?: FindFirstFreePortOptions) => {
+export const findFirstFreePort: FindFirstFreePortFunction = (options?: FindFirstFreePortOptions) => {
     options = options || {};
     options.portRange = options.portRange || `${basePort}-${basePortMax}`;
     if (!options.rangeSlice || (options.rangeSlice <= 0)) {
