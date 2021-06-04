@@ -1,0 +1,45 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        /* Basic Options */
+        "types" : ["node"],
+		"module": "commonjs",
+//        "lib": ["dom", "es2015.promise", "es5"],
+		"target": "es6",
+
+         "skipLibCheck": true,
+
+        /* Module Resolution Options */
+        "moduleResolution": "node",
+
+        // "incremental": true,
+
+        "preserveConstEnums": true,
+        "stripInternal": true,
+        "removeComments": false,
+        "resolveJsonModule": true,
+
+        /* Source Map Options */
+        "sourceMap": true,
+
+        /* Strict Type-Checking Options */
+        /* "strict" covers "alwaysStrict", "noImplicitAny", "noImplicitThis", "strictNullChecks",... */
+        "strict": true,
+        "strictNullChecks": false,
+
+        /* Additional Checks */
+        "noUnusedLocals" : true,
+        "noUnusedParameters" : false,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch" : true,
+        "forceConsistentCasingInFileNames": true,
+        // "importsNotUsedAsValues": "error",
+
+        /* Experimental Options */
+        "experimentalDecorators": true,
+
+        /* Treat a symlinked file like a real one. */
+        "preserveSymlinks": true
+    }
+}
+

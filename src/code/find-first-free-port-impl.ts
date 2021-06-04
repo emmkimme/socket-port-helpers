@@ -2,8 +2,7 @@ import { FindFirstFreePortFunction, FindFirstFreePortOptions } from './find-firs
 import { testPort } from './test-port-impl';
 
 import { basePort, basePortMax, defaultRangeSlice } from './constants';
-
-const portman = require('portman');
+import { PortRange } from './port-range';
 
 function _findFirstFreePort(range: any, options: FindFirstFreePortOptions): Promise<number> {
     return new Promise<number>((resolve, reject) => {
@@ -61,6 +60,6 @@ export const findFirstFreePort: FindFirstFreePortFunction = (options?: FindFirst
     if (!options.rangeSlice || (options.rangeSlice <= 0)) {
         options.rangeSlice = defaultRangeSlice;
     }
-    return _findFirstFreePort(new portman.PortRange(options.portRange), options);
+    return _findFirstFreePort(new PortRange(options.portRange), options);
 }
 

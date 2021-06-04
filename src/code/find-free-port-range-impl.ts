@@ -3,8 +3,7 @@ import { findFirstFreePort } from './find-first-free-port-impl';
 import { testPort } from './test-port-impl';
 
 import { basePort, basePortMax, defaultRangeSlice } from './constants';
-
-const portman = require('portman');
+import { PortRange } from './port-range';
 
 function _findFreePortRange(remainingCount: number, range: any, options: FindFreePortRangeOptions): Promise<number[]> {
     return new Promise<number[]>((resolve, reject) => {
@@ -69,6 +68,6 @@ export const findFreePortRange: FindFreePortRangeFunction = (count: number, opti
         });
     }
     else {
-        return _findFreePortRange(count, new portman.PortRange(options.portRange), options);
+        return _findFreePortRange(count, new PortRange(options.portRange), options);
     }
 }
