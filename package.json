@@ -1,12 +1,13 @@
 {
   "name": "socket-port-helpers",
-  "version": "1.2.0",
-  "description": "Helpers for checking ports.",
+  "version": "2.0.0",
+  "description": "Helpers for checking ports",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/emmkimme/socket-port-helpers.git"
   },
   "keywords": [
+    "range",
     "socket",
     "port",
     "net",
@@ -20,6 +21,7 @@
     "connection",
     "connect",
     "local",
+    "tools",
     "utilities",
     "helpers"
   ],
@@ -32,7 +34,7 @@
   "maintainers": [
     {
       "name": "Emmanuel Kimmerlin",
-      "email": "emmanuel.kimmerlin@thomsonreuters.com"
+      "email": "emmanuel.kimmerlin@refinitiv.com"
     }
   ],
   "main": "./lib/socket-port-helpers.js",
@@ -49,9 +51,6 @@
     "tslint": "^4.1.1",
     "tslint-microsoft-contrib": "^4.0.1",
     "typescript": "^4.3.2"
-  },
-  "dependencies": {
-    "portman": "0.0.3"
   },
   "scripts": {
     "clean": "del-cli ./lib ./build ./dist",

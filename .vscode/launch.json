@@ -12,7 +12,8 @@
            
                 "args": [
                     // "--grep=test-range-port",
-                    "test/**/*.js",
+                    "test/range.test.js",
+                    // "test/**/*.js",
                     "--no-timeouts",
                     "--recursive"
                 ],
