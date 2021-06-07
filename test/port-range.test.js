@@ -4,11 +4,11 @@
 const assert = require('assert')
 
 /* in-package */
-const { Range } = require('../lib/code/range');
+const { PortRange } = require('../lib/code/port-range');
 
-describe('Range', () => {
+describe('PortRange', () => {
     it('single port', () => {
-        let range = new Range('80');
+        let range = new PortRange('80');
         assert( range.covers(  80));
 
         assert.equal(range.next(), 80);
@@ -16,7 +16,7 @@ describe('Range', () => {
     });
 
     it('space seperated ports', () => {
-        let range = new Range('80 8080');
+        let range = new PortRange('80 8080');
         assert( range.covers(  80));
         assert(!range.covers( 443));
         assert( range.covers(8080));
@@ -26,7 +26,7 @@ describe('Range', () => {
     });
 
     it('comparator !=', () => {
-        let range = new Range('!=80');
+        let range = new PortRange('!=80');
         assert(!range.covers(  80));
         assert( range.covers(  21));
         assert( range.covers( 443));
@@ -37,7 +37,7 @@ describe('Range', () => {
     });
 
     it('comparator >=', () => {
-        let range = new Range('>=1024');
+        let range = new PortRange('>=1024');
         assert(!range.covers(  80));
         assert( range.covers(1024));
         assert( range.covers(8080));
@@ -47,7 +47,7 @@ describe('Range', () => {
     });
 
     it('comparator <=', () => {
-        let range = new Range('<=1024');
+        let range = new PortRange('<=1024');
         assert( range.covers(  80));
         assert( range.covers(1024));     
         assert(!range.covers(8080));
@@ -58,7 +58,7 @@ describe('Range', () => {
     });
 
     it('comparator >', () => {
-        let range = new Range('>1024');
+        let range = new PortRange('>1024');
         assert(!range.covers(  80));
         assert(!range.covers(1024));
         assert( range.covers(8080));
@@ -68,7 +68,7 @@ describe('Range', () => {
     });
 
     it('comparator <', () => {
-        let range = new Range('<1024');
+        let range = new PortRange('<1024');
         assert( range.covers(  80));
         assert(!range.covers(1024));
         assert(!range.covers(8080));
@@ -78,7 +78,7 @@ describe('Range', () => {
     });
 
     it('comparator =', () => {
-        let range = new Range('=1024');
+        let range = new PortRange('=1024');
         assert( range.covers(1024));
         assert(!range.covers(80));
         assert.equal(range.next(), 1024);
@@ -86,7 +86,7 @@ describe('Range', () => {
     });
 
     it('combined comparators', () => {
-        let range = new Range('>=7000 <=8000 !=7100');
+        let range = new PortRange('>=7000 <=8000 !=7100');
         assert(!range.covers(6999));
         assert( range.covers(7000));
         assert(!range.covers(7100));
@@ -96,7 +96,7 @@ describe('Range', () => {
     });
     
     it('hyphen range', () => {
-        let range = new Range('7000-8000');
+        let range = new PortRange('7000-8000');
         assert(!range.covers(6999));
         assert( range.covers(7000));
         assert( range.covers(8000));
@@ -104,7 +104,7 @@ describe('Range', () => {
     });
 
     it('comma seperated range', () => {
-        let range = new Range('80,8080');
+        let range = new PortRange('80,8080');
         assert( range.covers(  80));
         assert(!range.covers( 443));
         assert( range.covers(8080));
@@ -114,7 +114,7 @@ describe('Range', () => {
     });
 
     it('logical ||', () => {
-        let range = new Range('80 || 8080');
+        let range = new PortRange('80 || 8080');
         assert( range.covers(  80));
         assert(!range.covers( 443));
         assert( range.covers(8080));
@@ -124,7 +124,7 @@ describe('Range', () => {
     });
 
     it('mixed ports and comparators', () => {
-        let range = new Range('80 8080 >=9000');
+        let range = new PortRange('80 8080 >=9000');
         assert.equal(range.next(), 80);
         assert.equal(range.next(), 8080);
         assert.equal(range.next(), 9000);

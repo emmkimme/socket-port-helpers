@@ -4,7 +4,7 @@ A javascript helpers for socket.
 # Features
 * Test one or multiple port/s
 * Look for one or multiple free port/s
-* range parser
+* port range parser
 
 # Installation
 ```Batchfile

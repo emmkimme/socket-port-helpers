@@ -13,7 +13,7 @@ const coverFn: { [key: string]: Function } = {
     '=': (rangePort: number, realPort: number) => realPort == rangePort,
 };
 
-export class Range {
+export class PortRange {
     private _orRangeJudgers: (number | Function[])[];
     private _cursor: number;
 

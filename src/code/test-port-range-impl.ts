@@ -3,7 +3,7 @@ import { testPort } from './test-port-impl';
 import { TestPortRangeFunction, TestPortRangeOptions} from './test-port-range';
 import { TestPortResult } from './test-port';
 import { basePort, basePortMax, defaultRangeSlice } from './constants';
-import { Range } from './range';
+import { PortRange } from './port-range';
 
 function _testPortRange(results: TestPortResult[], range: any, options: TestPortRangeOptions): Promise<TestPortResult[]> {
     return new Promise<TestPortResult[]>((resolve, reject) => {
@@ -49,6 +49,6 @@ export const testPortRange: TestPortRangeFunction = (portRange: string, options?
         options.rangeSlice = defaultRangeSlice;
     }
     const results: TestPortResult[] = [];
-    return _testPortRange(results, new Range(portRange), options);
+    return _testPortRange(results, new PortRange(portRange), options);
 }
 
