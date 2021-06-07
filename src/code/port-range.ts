@@ -23,9 +23,9 @@ export class PortRange {
         rangeCode.trim().split(/\|\||,/).forEach((code) => {
             code = code.trim().replace(/([!>=<])\s+/g, '$1').replace(/\s*-\s*/g, '-');
             const fns: Function[] = [];
-            let parts = code.split(/\s+/);
+            const parts = code.split(/\s+/);
             for (let i = 0; i < parts.length; i++) {
-                let part = parts[i];
+                const part = parts[i];
                 let comparator: string;
                 ['!=', '>=', '<=', '>', '<', '='].every((sign) => {
                     if (part.startsWith(sign)) {
@@ -35,7 +35,7 @@ export class PortRange {
                 });
 
                 if (comparator) {
-                    let rangePort = part.substr(comparator.length);
+                    const rangePort = part.substr(comparator.length);
                     if (!/^\d+$/.test(rangePort)) {
                         throw new Error(`Invalid range number: ${rangePort}`);
                     }
